@@ -4,7 +4,7 @@ import { Target, Eye, Award, Users } from 'lucide-react';
 import { useInView } from '../hooks/useInView';
 
 export function AboutSection() {
-  const ref = useRef(null);
+  const ref = useRef<HTMLElement>(null!);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
   const values = [
@@ -107,7 +107,7 @@ export function AboutSection() {
             >
               10K+
             </motion.p>
-            <p className="text-xs sm:text-sm lg:text-base text-gray-600">Envíos Realizados</p>
+            <p className="text-xs sm:text-sm lg:text-base text-gray-600">Servicios Realizados</p>
           </div>
           <div className="text-center">
             <motion.p

@@ -1,10 +1,11 @@
 import { motion } from 'motion/react';
 import { CheckCircle2 } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
-import logoImage from 'figma:asset/a13437646418926db39dcdcb8f859e105316ec4f.png';
-import vehicleImage from 'figma:asset/0fbb110873882429569c35697c0f45ca1f2f7753.png';
+
 
 export function HeroSection() {
+  const logoImage = "/logo.png";
+  const vehicleImage = "/van.png";
   const scrollToContact = () => {
     const element = document.getElementById('contacto');
     if (element) {

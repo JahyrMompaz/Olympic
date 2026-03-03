@@ -1,10 +1,11 @@
-import { motion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { useRef, useState } from 'react';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, Loader2, XCircle, CheckCircle } from 'lucide-react';
 import { useInView } from '../hooks/useInView';
+import axios from 'axios';
 
 export function ContactSection() {
-  const ref = useRef(null);
+  const ref = useRef<HTMLElement>(null!);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
   const [formData, setFormData] = useState({
     name: '',
@@ -13,11 +14,29 @@ export function ContactSection() {
     message: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [status, setStatus] = useState({
+    loading: false,
+    success: false,
+    error: ''
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Aquí iría la lógica para enviar el formulario
-    alert('Gracias por contactarnos. Nos comunicaremos pronto.');
-    setFormData({ name: '', email: '', phone: '', message: '' });
+    setStatus({ loading: true, success: false, error: '' });
+    
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await axios.post(apiUrl + '/contact', formData);
+      if (response.status === 200 || response.status === 201) {
+        setStatus({ loading: false, success: true, error: '' });
+        setFormData({ name: '', email: '', phone: '', message: '' });
+        setTimeout(() => {
+          setStatus(prev => ({ ...prev, success: false }));
+        }, 5000);
+      }
+    } catch (error) {
+      setStatus({ loading: false, success: false, error: 'Error al enviar el formulario.' });
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -37,13 +56,13 @@ export function ContactSection() {
     {
       icon: Mail,
       title: 'Email',
-      content: 'itrevino@olympic-se.com',
+      content: 'ventas@olympic-se.com',
       color: '#2cad54',
     },
     {
       icon: MapPin,
       title: 'Dirección',
-      content: 'Calle 123 #45-67, Bogotá, Colombia',
+      content: 'Monterrey, Nuevo León, México',
       color: '#7031a0',
     },
   ];
@@ -196,9 +215,42 @@ export function ContactSection() {
                   className="w-full px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-lg text-white flex items-center justify-center gap-2 hover:shadow-lg transition-all duration-300 transform hover:scale-105"
                   style={{ backgroundColor: '#2cad54' }}
                 >
-                  Enviar Mensaje
-                  <Send className="w-4 h-4 sm:w-5 sm:h-5" />
+                  {status.loading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Enviando...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5" />
+                      Enviar solicitud
+                    </>
+                  )}
                 </button>
+                <AnimatePresence>
+                  {status.success && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="p-3 rounded-lg bg-green-100 text-green-700 flex items-center gap-2 text-sm"
+                    >
+                      <CheckCircle className="w-5 h-5" />
+                      Mensaje enviado con éxito. Nos pondremos en contacto pronto.
+                    </motion.div>
+                  )}
+                  {status.error && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="p-3 rounded-lg bg-red-100 text-red-700 flex items-center gap-2 text-sm"
+                    >
+                      <XCircle className="w-5 h-5" />
+                      {status.error}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </form>
           </motion.div>

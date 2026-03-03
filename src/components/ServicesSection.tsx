@@ -1,6 +1,5 @@
 import { motion } from 'motion/react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
-import logoImage from 'figma:asset/a13437646418926db39dcdcb8f859e105316ec4f.png';
 
 export function ServicesSection() {
   const services = [

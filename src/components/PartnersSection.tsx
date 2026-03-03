@@ -3,49 +3,22 @@ import { useRef } from 'react';
 import { Building2, Handshake } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { useInView } from '../hooks/useInView';
-import harzyzLogo from 'figma:asset/fdab8e22b53a93c0f4a5ec82eea6a5ab9d99ec90.png';
 
 export function PartnersSection() {
-  const ref = useRef(null);
+  const ref = useRef<HTMLElement>(null!);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
   const partnerLogos = [
-    { name: 'Cemex', logo: 'https://logoeps.com/cemex-logo-vector/22883/'},
-    { name: 'Hisense', logo: 'https://worldvectorlogo.com/es/logo/hisense-1'},
-    { name: 'Jafra', logo: 'https://mx.linkedin.com/company/jafra-cosmetics?trk=public_profile_profile-section-card_subtitle-click' },
-    { name: 'Sultana', logo: 'https://cartonsultana.com/' },
-    { name: 'Harzyz Metals', logo: 'https://mx.indeed.com/cmp/Arzyz' },
-    { name: 'Instituto Docet', logo: 'https://www.docet.edu.mx/' },
+    { name: 'Cemex', logo: '/logos/cemex.png' },
+    { name: 'Hisense', logo: '/logos/hisense.svg' },
+    { name: 'Jafra', logo: '/logos/jafra.png' },
+    { name: 'Sultana', logo: '/logos/sultana.png' },
+    { name: 'Harzyz Metals', logo: '/logos/arzyz.png' },
+    { name: 'Instituto Docet', logo: '/logos/docet.png' },
   ];
 
   // Duplicate logos for seamless infinite scroll
   const duplicatedLogos = [...partnerLogos, ...partnerLogos];
-
-  const sliderSettings = {
-    dots: false,
-    infinite: true,
-    speed: 3000,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 0,
-    cssEase: 'linear',
-    pauseOnHover: true,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-        }
-      },
-      {
-        breakpoint: 640,
-        settings: {
-          slidesToShow: 2,
-        }
-      }
-    ]
-  };
 
   return (
     <section id="socios" ref={ref} className="py-12 sm:py-16 lg:py-20 bg-white">
